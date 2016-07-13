@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title></title>
+    
+	<link rel="stylesheet" href="./material.min.css">
+	<link rel="stylesheet" href="./bootstrap-3/css/bootstrap.min.css">
+	<script src="./material.min.js"></script>
+	<script src="./jquery-3.1.0.min.js"></script>
+	<script src="./jGfeed.js"></script>
+	<script src="./bootstrap-3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	
+	
+<style>
+/* CSS used here will be applied after bootstrap.css */
+
+.thumbnail {
+	padding:0;
+}
+  .layout-transparent {
+  background: url('https://www.getmdl.io/assets/demos/transparent.jpg') center / cover;
+}
+.layout-transparent .mdl-layout__header,
+.layout-transparent .mdl-layout__drawer-button {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+  color: white;
+}
+hr{
+    border-color: burlywood;
+	}
+</style>
+<script>
+function deletedynamicelement()
+{
+	var myNode = document.getElementById("dynamicdiv");
+	while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+	}
+	
+	var layout = document.querySelector('.mdl-layout');
+	layout.MaterialLayout.toggleDrawer();
+}
+
+function loadnews(categoryid)
+{
+	
+	//document.removeChild(document.documentElement);
+	if(categoryid=="sports")
+	 {
+		var url="https://indianexpress.com/section/sports/feed/";
+		deletedynamicelement();
+		
+	 }
+	  else
+	 if(categoryid=="world")
+	 {
+		var url="	https://indianexpress.com/section/world/feed/";
+		deletedynamicelement();
+	 }
+	  else
+	 if(categoryid=="bollwood")
+	 {
+		var url="https://indianexpress.com/section/entertainment/bollywood/feed/";
+		deletedynamicelement();
+	 }
+	  else
+	 if(categoryid=="lifestyle")
+	 {
+		var url="https://indianexpress.com/section/lifestyle/feed/";
+		deletedynamicelement();
+		
+	 }
+	 else
+	 {
+		var url="https://indianexpress.com/section/india/feed/";
+	 }
+	 
+$.jGFeed(url,
+  function(feeds){
+    // Check for errors
+    if(!feeds){
+      // there was an error
+      return false;
+    }
+    // do whatever you want with feeds here
+    for(var i=0; i<feeds.entries.length; i++){
+		var entry = feeds.entries[i];
+		
+		var hrtag=document.createElement('hr');
+		//document.getElementsByTagName('bodycontent')[0].appendChild(hrtag);
+		dynamicdiv.appendChild(hrtag);
+		
+		var iDiv = document.createElement('div');
+		iDiv.id = 'block';
+		iDiv.className = 'container';
+		dynamicdiv.appendChild(iDiv);
+
+		// Now create and append to iDiv
+		var innerDiv0 = document.createElement('div');
+		innerDiv0.className = 'row';
+		iDiv.appendChild(innerDiv0);
+
+		var innerDiv1 = document.createElement('div');
+		innerDiv1.className = 'col-md-2 col-md-4';
+		innerDiv0.appendChild(innerDiv1);
+
+		var innerDiv2 = document.createElement('div');
+		innerDiv2.className = 'thumbnail';
+		innerDiv1.appendChild(innerDiv2);
+
+		var imgtag=document.createElement('img');
+		//imgtag.className='card-img-top';
+		imgtag.src=entry.mediaGroups[0].contents[0].url;
+		innerDiv2.appendChild(imgtag);
+
+		var innerDiv3 = document.createElement('div');
+		innerDiv3.className = 'caption';
+		innerDiv2.appendChild(innerDiv3);
+
+		var txtLabel = document.createElement('h4');
+		//txtLabel.className='card-title'
+		txtLabel.innerHTML = entry.title ;
+		innerDiv3 .appendChild(txtLabel);
+		var pargraph=document.createElement('p')
+		//pargraph.className='card-text';
+		pargraph.innerHTML=entry.contentSnippet;
+		innerDiv3 .appendChild(pargraph);
+
+		var atag=document.createElement('a')
+		atag.className='btn btn-default btn-xs pull-right';
+		atag.setAttribute('href','#');
+		innerDiv3 .appendChild(atag);
+
+		var itag=document.createElement('i')
+		itag.className='glyphicon glyphicon-edit';
+		atag.appendChild(itag);
+
+		var anchortag=document.createElement('a')
+		anchortag.className='btn btn-default btn-xs';
+		anchortag.setAttribute('href',entry.link);
+		anchortag.setAttribute('target','_blank');
+		anchortag.innerHTML = "More Info";
+		innerDiv3 .appendChild(anchortag);
+
+    }
+}, 15);
+
+}
+window.onload=loadnews();
+
+</script>
+    </head>
+    <body>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">News</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      
+    </div>
+  </header>
+  <div class="mdl-layout__drawer" id="menudiv">
+    <span class="mdl-layout-title">Title</span>
+    <nav class="mdl-navigation">
+       <a id="sports" class="mdl-navigation__link" href="" onclick="return(loadnews(this.id),false);">Sports News</a>
+      <a id="world" class="mdl-navigation__link" href="" onclick="return(loadnews(this.id),false);">World News</a>
+      <a id="bollwood" class="mdl-navigation__link" href="" onclick="return(loadnews(this.id),false);">Bollwood</a>
+      <a id="lifestyle" class="mdl-navigation__link" href="" onclick="return(loadnews(this.id),false);">Life Style</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content" style="background-color: antiquewhite;">
+    <div id="bodycontent" class="page-content"><!-- Your content goes here -->
+	<div id="dynamicdiv"></div>
+	</div>
+  </main>
+</div>
+    </body>
+</html>
